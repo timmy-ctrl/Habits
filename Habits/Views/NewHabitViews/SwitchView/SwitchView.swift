@@ -1,12 +1,15 @@
 import UIKit
 
+
 final class SwitchView: UIView {
+    
+    let notifications = Notifications()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Notification"
+        label.text = "Уведомления"
         label.middleFont()
-        label.textColor = UIColor.customColor
+        label.textColor = UIColor.lilacColor
         return label
     }()
     
@@ -42,18 +45,21 @@ final class SwitchView: UIView {
         return offLabel
     }()
     
-    private var isOn = false
+    public var isOn = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        configureSwitchView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private func setupView() {
+}
+
+//MARK: - Setup UI
+extension SwitchView {
+    private func configureSwitchView() {
         self.backgroundColor = .white
         self.layer.cornerRadius = 16
         let stackView = UIStackView(arrangedSubviews: [titleLabel, switchBackgroundView])
@@ -91,7 +97,7 @@ final class SwitchView: UIView {
 
 //MARK: - Animation
 extension SwitchView {
-    private func updateSwitchAppearance() {
+    public func updateSwitchAppearance() {
         if isOn {
             UIView.animate(withDuration: 0.25) {
                 self.toggleButton.frame.origin.x = self.switchBackgroundView.frame.width - self.toggleButton.frame.width - 2
@@ -99,6 +105,7 @@ extension SwitchView {
                 self.onLabel.alpha = 1
                 self.offLabel.alpha = 0
             }
+            notifications.checkForPermission()
         } else {
             UIView.animate(withDuration: 0.25) {
                 self.toggleButton.frame.origin.x = 2

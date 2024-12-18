@@ -9,8 +9,8 @@ final class BillboardViewNewHabitView: UIView {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.textUppercased(text: "Start this habit")
-        titleLabel.textColor = UIColor.customColor
+        titleLabel.textUppercased(text: "Начать привычку")
+        titleLabel.textColor = UIColor.lilacColor
         titleLabel.alignmentCenter()
         titleLabel.font = .systemFont(ofSize: 23, weight: .bold)
         return titleLabel
@@ -18,9 +18,9 @@ final class BillboardViewNewHabitView: UIView {
     
     private let descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.textUppercased(text: "ullamco laboris nisi ut aliquip ex ea commodo consequat dolore. ")
+        descriptionLabel.textUppercased(text: "Каждое великое достижение начинается с маленького шага. Сделайте свой первый шаг сегодня.")
         descriptionLabel.numberOfLines = 5
-        descriptionLabel.textColor = UIColor.textFieldColor
+        descriptionLabel.textColor = UIColor.darkGrayColor
         descriptionLabel.alignmentCenter()
         descriptionLabel.smallFont()
         return descriptionLabel
@@ -40,13 +40,17 @@ final class BillboardViewNewHabitView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureBillboardView()
-        configureFaceBilboardImageView()
-        configureBillboardViewNewHabitStackView()
+        configureBillboardViewNewHabitViewUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureBillboardViewNewHabitViewUI() {
+        configureBillboardView()
+        configureFaceBilboardImageView()
+        configureBillboardViewNewHabitStackView()
     }
 }
 
@@ -72,7 +76,6 @@ extension BillboardViewNewHabitView {
             billboardViewNewHabitStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
             billboardViewNewHabitStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
         ])
-        
         NSLayoutConstraint.activate([
                completeHabitImageView.widthAnchor.constraint(equalToConstant: 20),
                completeHabitImageView.heightAnchor.constraint(equalToConstant: 25)

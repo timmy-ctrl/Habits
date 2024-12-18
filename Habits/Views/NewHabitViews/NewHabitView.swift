@@ -2,13 +2,27 @@ import UIKit
 
 final class NewHabitView: UIView {
     
-    private let billboardViewNewHabitView = BillboardViewNewHabitView()
-    private let switchView = SwitchView()
-    private let habitTrackerView = HabitTrackerView()
-    public let reminderView = ReminderTextView()
+    private let billboardViewNewHabitView: BillboardViewNewHabitView
+    private let switchView: SwitchView
+    public let habitFrequencyView: HabitFrequencyView
+    public let reminderView: ReminderPresentView
     
-    private var habitEntryStackView: UIStackView = {
-        let habitEntryStackView = UIStackView()
+    private let habitFrequencyViewModel: HabitFrequencyModel
+    
+    public let backButton: UIButton = {
+        let backButton = UIButton()
+        backButton.setImage(AssetImages.backarray.image, for: .normal)
+        backButton.backgroundColor = UIColor.beigeColor
+        backButton.layer.cornerRadius = 22
+        return backButton
+    }()
+    
+    private lazy var habitEntryStackView: UIStackView = {
+        habitEntryStackView = UIStackView(arrangedSubviews: [habitNameTextField,
+                                                             addHabbitButton])
+        habitEntryStackView.distribution = .fillProportionally
+        habitEntryStackView.spacing = 12
+        habitEntryStackView.axis = .horizontal
         return habitEntryStackView
     }()
     
@@ -26,7 +40,7 @@ final class NewHabitView: UIView {
     public let completedHabbitButton: UIButton = {
         let addHabbitButton = UIButton()
         addHabbitButton.setImage(AssetImages.completed.image, for: .normal)
-        addHabbitButton.backgroundColor = UIColor.backgroundOrangeButton
+        addHabbitButton.backgroundColor = UIColor.orangeColor
         addHabbitButton.layer.cornerRadius = 25
         return addHabbitButton
     }()
@@ -44,7 +58,7 @@ final class NewHabitView: UIView {
         habitNameTextField.layer.cornerRadius = 20
         habitNameTextField.attributedPlaceholder = NSAttributedString(
                 string: "Enter habit name",
-                attributes: [NSAttributedString.Key.foregroundColor: UIColor.textFieldColor]
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGrayColor]
             )
         habitNameTextField.backgroundColor = UIColor.whiteColor
         habitNameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 0))
@@ -58,40 +72,35 @@ final class NewHabitView: UIView {
         return backgroundImage
     }()
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, habitFrequencyViewModel: HabitFrequencyModel) {
+        self.habitFrequencyViewModel = habitFrequencyViewModel
+        self.billboardViewNewHabitView = BillboardViewNewHabitView()
+        self.switchView = SwitchView()
+        self.habitFrequencyView = HabitFrequencyView(frame: .zero, viewModel: habitFrequencyViewModel)
+        self.reminderView = ReminderPresentView()
         super.init(frame: frame)
         startShadowPulseAnumation()
+        configureNewHabitView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureNewHabitView() {
         congifureBackgroundImage()
         configureAddHabbitButton()
         configureBillboardViewNewHabitView()
         configureHabitEntryStackView()
         confugureViewsStuckView()
         configureHabitPlusButton()
-        habitTrackerview()
+        configureBackButton()
         configureBackgroundColor()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
 //MARK: - Setup UI
 extension NewHabitView {
-    
-    private func habitTrackerview() {
-        habitTrackerView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubviews(habitTrackerView)
-        NSLayoutConstraint.activate([
-            habitTrackerView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -200),
-            habitTrackerView.heightAnchor.constraint(equalToConstant: 180),
-            habitTrackerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            habitTrackerView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            
-        ])
-        
-        habitTrackerView.updateCircles(frequencies: [2,1,1,2,1,2,2])
-    }
     private func congifureBackgroundImage() {
         self.addSubviews(backgroundImageView)
         NSLayoutConstraint.activate([
@@ -101,15 +110,10 @@ extension NewHabitView {
         ])
     }
     private func configureBackgroundColor() {
-        self.backgroundColor = UIColor.backgroundColorVC
+        self.backgroundColor = UIColor.lightBeigeColor
     }
-    
     private func configureHabitEntryStackView() {
-        habitEntryStackView = UIStackView(arrangedSubviews: [habitNameTextField,
-                                                             addHabbitButton])
-        habitEntryStackView.distribution = .fillProportionally
-        habitEntryStackView.spacing = 12
-        habitEntryStackView.axis = .horizontal
+       
         self.addSubviews(habitEntryStackView)
         NSLayoutConstraint.activate([
             habitEntryStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 15),
@@ -123,17 +127,27 @@ extension NewHabitView {
     }
     
     private func confugureViewsStuckView() {
-        viewsStuckView = UIStackView(arrangedSubviews: [reminderView,
-                                                        switchView])
-        viewsStuckView.distribution = .fillEqually
-        viewsStuckView.spacing = 15
+        viewsStuckView = UIStackView(arrangedSubviews: [habitFrequencyView,
+                                                        reminderView,
+                                                        switchView,
+                                                       ])
+        viewsStuckView.distribution = .fill
+        viewsStuckView.spacing = 10
         viewsStuckView.axis = .vertical
         self.addSubviews(viewsStuckView)
         NSLayoutConstraint.activate([
             viewsStuckView.topAnchor.constraint(equalTo: habitEntryStackView.bottomAnchor, constant: 15),
             viewsStuckView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
             viewsStuckView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
-            viewsStuckView.heightAnchor.constraint(equalToConstant: 120),
+        ])
+        NSLayoutConstraint.activate([
+            habitFrequencyView.heightAnchor.constraint(equalToConstant: 135)
+        ])
+        NSLayoutConstraint.activate([
+            reminderView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        NSLayoutConstraint.activate([
+            switchView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     private func configureBillboardViewNewHabitView() {
@@ -145,7 +159,6 @@ extension NewHabitView {
             billboardViewNewHabitView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
         ])
     }
-
     private func configureAddHabbitButton() {
         self.addSubviews(completedHabbitButton)
         NSLayoutConstraint.activate([
@@ -162,12 +175,19 @@ extension NewHabitView {
             habitPlusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
         ])
     }
+    private func configureBackButton() {
+        self.addSubviews(backButton)
+        NSLayoutConstraint.activate([
+            backButton.widthAnchor.constraint(equalToConstant: 44),
+            backButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
 }
 
 //MARK: - Animation Button
 extension NewHabitView {
     private func startShadowPulseAnumation() {
-        completedHabbitButton.layer.shadowColor = UIColor.backgroundOrangeButton.cgColor
+        completedHabbitButton.layer.shadowColor = UIColor.orangeColor.cgColor
         completedHabbitButton.layer.shadowOffset = .zero
         completedHabbitButton.layer.shadowOpacity = 0.7
         

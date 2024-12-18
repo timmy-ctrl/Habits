@@ -3,7 +3,7 @@ import UIKit
 final class HomePageView: UIView {
     
     private var isAnimate = false
-    
+        
     private let backgroundImageView: UIImageView = {
         let backgroundImage = UIImageView()
         backgroundImage.image = AssetImages.homePageBackground.image
@@ -14,14 +14,14 @@ final class HomePageView: UIView {
         let titleHomePageCalendarLabel = UILabel()
         titleHomePageCalendarLabel.textUppercased(text: "Habits")
         titleHomePageCalendarLabel.middleFont()
-        titleHomePageCalendarLabel.textColor = UIColor.customColor
+        titleHomePageCalendarLabel.textColor = UIColor.lilacColor
         return titleHomePageCalendarLabel
     }()
     
     public let addHabbitButton: UIButton = {
         let addHabbitButton = UIButton()
         addHabbitButton.setImage(AssetImages.plus.image, for: .normal)
-        addHabbitButton.backgroundColor = UIColor.backgroundOrangeButton
+        addHabbitButton.backgroundColor = UIColor.orangeColor
         addHabbitButton.layer.cornerRadius = 25
         return addHabbitButton
     }()
@@ -31,6 +31,14 @@ final class HomePageView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureHomePageView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureHomePageView() {
         congifureBackgroundImage()
         configureBillboardView()
         configureTitleHomePageCalendarLabel()
@@ -38,10 +46,6 @@ final class HomePageView: UIView {
         configireHomePageCalendarViewController()
         configureAddHabbitButton()
         configureBackgroundColor()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -75,7 +79,7 @@ extension HomePageView {
         ])
     }
     private func configureBackgroundColor() {
-        self.backgroundColor = UIColor.backgroundColorVC
+        self.backgroundColor = UIColor.lightBeigeColor
     }
     private func configureBillboardView() {
         self.addSubviews(billboardView)
@@ -98,7 +102,7 @@ extension HomePageView {
 //MARK: - Animation Button
 extension HomePageView {
     private func startShadowPulseAnumation() {
-        addHabbitButton.layer.shadowColor = UIColor.backgroundOrangeButton.cgColor
+        addHabbitButton.layer.shadowColor = UIColor.orangeColor.cgColor
         addHabbitButton.layer.shadowOffset = .zero
         addHabbitButton.layer.shadowOpacity = 0.7
         

@@ -16,4 +16,11 @@ extension UILabel {
     func smallFont() {
         self.font = .systemFont(ofSize: 12, weight: .regular)
     }
+    func introductionFontBold(text: String) {
+        self.text = text.uppercased()
+        self.font = .systemFont(ofSize: 23, weight: .bold)
+    }
+    func collectionCellFont() {
+        self.font = .systemFont(ofSize: 20, weight: .bold)
+    }
 }

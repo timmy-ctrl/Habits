@@ -1,14 +1,14 @@
 import UIKit
 
 final class HomePageViewController: UIViewController {
-    
+
     private var homePageView: HomePageView? {
         view as? HomePageView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        transitionOnNewHabbitViewController()
+        transitionOnNewHabitViewController()
         setTitleViewController()
     }
     
@@ -17,19 +17,25 @@ final class HomePageViewController: UIViewController {
         self.view = HomePageView()
     }
     
-    private func transitionOnNewHabbitViewController() {
+    private func transitionOnNewHabitViewController() {
         homePageView?.addHabbitButton.addTarget(self, action: #selector(didTappedAddHabbitButton), for: .touchUpInside)
-    }
-    
-    private func setTitleViewController() {
-        title = "Homepage"
     }
 }
 
 //MARK: - Action Buttons
 extension HomePageViewController {
    @objc private func didTappedAddHabbitButton() {
-        let newHabbitVC = NewHabitViewController()
+       let habitFrequencyViewModel = HabitFrequencyModel()
+       let newHabbitVC = NewHabitViewController(habitFrequencyViewModel: habitFrequencyViewModel)
         navigationController?.pushViewController(newHabbitVC, animated: true)
     }
 }
+
+//MARK: - Setup UI
+extension HomePageViewController {
+    private func setTitleViewController() {
+        title = "Homepage"
+    }
+}
+
+
